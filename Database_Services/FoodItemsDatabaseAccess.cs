@@ -9,14 +9,13 @@ using MySqlConnector;
 
 namespace FoodItemsWebApi.Database_Services
 {
-    public class DataAccess
+    public class FoodItemsDatabaseAccess
     {
-
-        public static async Task<List<GetFoodItemDto>> GetFoodItemDtos(string connectionString)
+        public static async Task<List<GetFoodItemDto>> GetAllFoodItemDtos(string connectionString)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sqlQuery = "SELECT * FROM food_items";
+                string sqlQuery = "call crud_operations.`crud_operations.spGetAllFoodItems`();";
                 var data = await connection.QueryAsync<GetFoodItemDto>(sqlQuery);
                 var listData = data.ToList();
                 return listData;
@@ -27,7 +26,7 @@ namespace FoodItemsWebApi.Database_Services
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sqlQuery = $"SELECT * FROM food_items where id = @ID";
+                string sqlQuery = $"call crud_operations.`crud_operations.spGetFoodItemByID`(@ID);";
                 var data = await connection.QueryFirstOrDefaultAsync<GetFoodItemDto>(sqlQuery, param);
                 return data;
             }
@@ -37,7 +36,7 @@ namespace FoodItemsWebApi.Database_Services
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sqlQuery = $"INSERT INTO food_items (`foodName`, `price`) VALUES (@foodName, @price);";
+                string sqlQuery = $"call crud_operations.`crud_operations.spAddFoodItems`(@foodName, @price);";
                 var rowsAffected = await connection.ExecuteAsync(sqlQuery, paramerters);
                 return rowsAffected;
             }
@@ -47,7 +46,9 @@ namespace FoodItemsWebApi.Database_Services
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sqlQuery = $"UPDATE food_items SET `foodName` = @foodName, `price` = @price WHERE (`id` = @id);";
+                //string sqlQuery = $"UPDATE food_items SET `foodName` = @foodName, `price` = @price WHERE (`id` = @id);";
+                string sqlQuery = $"call crud_operations.`crud_operations.spUpdateItemByID`(@foodName, @price, @id);";
+
                 var rowsAffected = await connection.ExecuteAsync(sqlQuery, paramerters);
                 if (rowsAffected == 0)
                 {
@@ -57,17 +58,16 @@ namespace FoodItemsWebApi.Database_Services
             }
         }
 
-
         public static async Task<int> RemoveFoodItems<T>(string connectionString, T paramerters)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                string sqlQuery = $"DELETE FROM food_items WHERE (`id` = @ID);";
+                //string sqlQuery = $"DELETE FROM food_items WHERE (`id` = @ID);";
+                string sqlQuery = $"call crud_operations.`crud_operations.spDeleteItemByID`(@ID);";
                 var rowsAffected = await connection.ExecuteAsync(sqlQuery, paramerters);
                 
                 return rowsAffected;
             }
         }
-
     }
 }

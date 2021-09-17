@@ -11,7 +11,7 @@ namespace FoodItemsWebApi.Services
     {
         Task<ServiceResponse<List<GetFoodItemDto>>> GetAllFoodItems();
         Task<ServiceResponse<GetFoodItemDto>> GetFoodItemById(int id);
-        Task<ServiceResponse<List<GetFoodItemDto>>> AddFoodItem(AddFoodItemDto newItem);
+        Task<ServiceResponse<List<AddFoodItemDto>>> AddFoodItem(AddFoodItemDto newItem);
         Task<ServiceResponse<GetFoodItemDto>> UpdateFoodItemById(UpdateFoodItemDto updatedItem);
         Task<ServiceResponse<int>> DeleteFoodItemById(int id);
     }

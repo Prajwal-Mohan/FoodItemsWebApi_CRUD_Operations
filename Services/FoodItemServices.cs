@@ -22,13 +22,6 @@ namespace FoodItemsWebApi.Services
             this._configuration = configuration;
         }
 
-
-
-        public static List<FoodItem> FoodItems = new List<FoodItem> {
-            new FoodItem {foodName = "Idli", price = 20 } ,
-            new FoodItem {ID=1, foodName = "Dosa", price = 40 }
-        };
-
         private readonly IMapper _autoMapper;
         private readonly IConfiguration _configuration;
         string ConnectionString => _configuration.GetConnectionString("localDB");
@@ -37,7 +30,7 @@ namespace FoodItemsWebApi.Services
         {
             ServiceResponse<List<GetFoodItemDto>> serviceResponse = new ServiceResponse<List<GetFoodItemDto>>();
 
-            var data = await DataAccess.GetFoodItemDtos(ConnectionString);
+            var data = await FoodItemsDatabaseAccess.GetAllFoodItemDtos(ConnectionString);
 
             serviceResponse.Data = data;
             return serviceResponse;
@@ -46,7 +39,7 @@ namespace FoodItemsWebApi.Services
         public async Task<ServiceResponse<GetFoodItemDto>> GetFoodItemById(int id)
         {
             ServiceResponse<GetFoodItemDto> serviceResponse = new ServiceResponse<GetFoodItemDto>();
-            var data = await DataAccess.GetFoodItemDtosById(ConnectionString, id, new { ID = id});
+            var data = await FoodItemsDatabaseAccess.GetFoodItemDtosById(ConnectionString, id, new { ID = id});
             if (data == null )
             {
                 serviceResponse.Data = null;
@@ -58,14 +51,14 @@ namespace FoodItemsWebApi.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetFoodItemDto>>> AddFoodItem(AddFoodItemDto newItem)
+        public async Task<ServiceResponse<List<AddFoodItemDto>>> AddFoodItem(AddFoodItemDto newItem)
         {
-            ServiceResponse<List<GetFoodItemDto>> serviceResponse = new ServiceResponse<List<GetFoodItemDto>>();
-            int insertedRow = await DataAccess.AddFoodItems(ConnectionString, newItem, new { foodName = newItem.foodName, price = newItem.price });
+            ServiceResponse<List<AddFoodItemDto>> serviceResponse = new ServiceResponse<List<AddFoodItemDto>>();
+            int insertedRow = await FoodItemsDatabaseAccess.AddFoodItems(ConnectionString, newItem, new { foodName = newItem.foodName, price = newItem.price });
 
             if (insertedRow > 0)
             {
-                serviceResponse.Data = new List<GetFoodItemDto>() { new GetFoodItemDto { foodName = newItem.foodName, price = newItem.price } };
+                serviceResponse.Data = new List<AddFoodItemDto>() { new AddFoodItemDto { foodName = newItem.foodName, price = newItem.price } };
                 serviceResponse.message = $"Rows Affected {insertedRow}";
 
                 return serviceResponse;
@@ -80,7 +73,7 @@ namespace FoodItemsWebApi.Services
         {
             ServiceResponse<GetFoodItemDto> serviceResponse = new ServiceResponse<GetFoodItemDto>();
 
-            var data = await DataAccess.UpdateFoodItems(ConnectionString, updatedItem, new { foodName = updatedItem.foodName, price = updatedItem.price, id = updatedItem.ID});
+            var data = await FoodItemsDatabaseAccess.UpdateFoodItems(ConnectionString, updatedItem, new { foodName = updatedItem.foodName, price = updatedItem.price, id = updatedItem.ID});
 
             if (data == null)
             {
@@ -97,7 +90,7 @@ namespace FoodItemsWebApi.Services
         {
             ServiceResponse<int> serviceResponse = new ServiceResponse<int>();
 
-            var affectedRow = await DataAccess.RemoveFoodItems(ConnectionString, new { ID = id });
+            var affectedRow = await FoodItemsDatabaseAccess.RemoveFoodItems(ConnectionString, new { ID = id });
             if (affectedRow == 0)
             {
                 serviceResponse.Data = 0;
