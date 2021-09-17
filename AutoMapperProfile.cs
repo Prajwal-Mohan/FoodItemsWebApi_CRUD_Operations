@@ -14,6 +14,7 @@ namespace FoodItemsWebApi
         {
             CreateMap<FoodItem, GetFoodItemDto>();
             CreateMap<GetFoodItemDto, FoodItem>();
+            CreateMap<UpdateFoodItemDto, GetFoodItemDto>();
             CreateMap<AddFoodItemDto, FoodItem>();
             CreateMap<FoodItem, UpdateFoodItemDto>();
         }

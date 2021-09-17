@@ -46,7 +46,7 @@ namespace FoodItemsWebApi.Controllers
             return Ok(await _foodItemService.UpdateFoodItemById(newItem));
         }
 
-        [HttpDelete("")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFoodItem(int id)
         {
             return Ok(await _foodItemService.DeleteFoodItemById(id));

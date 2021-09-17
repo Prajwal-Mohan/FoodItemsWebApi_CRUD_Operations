@@ -13,6 +13,6 @@ namespace FoodItemsWebApi.Services
         Task<ServiceResponse<GetFoodItemDto>> GetFoodItemById(int id);
         Task<ServiceResponse<List<GetFoodItemDto>>> AddFoodItem(AddFoodItemDto newItem);
         Task<ServiceResponse<GetFoodItemDto>> UpdateFoodItemById(UpdateFoodItemDto updatedItem);
-        Task<ServiceResponse<GetFoodItemDto>> DeleteFoodItemById(int id);
+        Task<ServiceResponse<int>> DeleteFoodItemById(int id);
     }
 }
