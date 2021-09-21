@@ -1,6 +1,7 @@
 ﻿using FoodItemsWebApi.DTOs.FoodItem;
 using FoodItemsWebApi.Models;
 using FoodItemsWebApi.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace FoodItemsWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class FoodItemsController : Controller
     {
         private readonly IFoodItemServices _foodItemService;

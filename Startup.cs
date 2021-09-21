@@ -1,4 +1,4 @@
-using FoodItemsWebApi.Services;
+﻿using FoodItemsWebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +31,17 @@ namespace FoodItemsWebApi
             services.AddControllers();
             services.AddScoped<IFoodItemServices, FoodItemServices>();
             services.AddAutoMapper(typeof(Startup));
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => 
+                { 
+                    builder.WithOrigins("https://localhost:5002");
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                } );
+                
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FoodItemsWebApi", Version = "v1" });
@@ -50,6 +61,8 @@ namespace FoodItemsWebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
